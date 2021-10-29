@@ -1,0 +1,112 @@
+@startuml
+class ToDoItem {
+  - String itemName
+  - String itemDueDate
+  - String itemDetails
+  + boolean completionStatus
+--
+  + ToDoItem(String name, String date, String details)
+  + ToDoItem(String name, String date, String details, boolean completion)
+..
+Setter methods
+  + void setItemName(String name)
+  + void setDueDate(String date)
+  + void setDetails(String details)
+  + void setCompletionStatus(boolean completion)
+..
+Getter methods
+  + String getItemName()
+  + String getDueDate()
+  + String getItemDetails()
+}
+MainWindowController -- ToDoItem
+Application -- ToDoItem
+
+class Application {
+Launching methods
+  + void start(Stage stage)
+  + static void main(String[] args)
+}
+
+class MainWindowController {
+  # ArrayList<ToDoItem> listOfItems
+  # boolean showCompleted
+  # boolean showIncomplete
+
+    @FXML Items
+        - Button saveBtn
+        - Button uploadBtn
+        - Label nameText
+        - Label dateText
+        - Label detailText
+        - CheckBox hideCompletedBtn
+        - CheckBox hideIncompleteBtn
+        - ListView<?> listOfItemsList
+        - Button listOfItemsAddBtn
+        - Button listOfItemsEditBtn
+        - Button listOfItemsRmvBtn
+  --
+    @FXML actions
+        - void saveList()
+        - void uploadList()
+        - void setNameText()
+        - void setDateText()
+        - void setDetailText()
+        - void setHideCompletedBtn()
+        - void setHideIncompleteBtn()
+        - void selectFromListOfItems()
+        - void useListOfItemsAddBtn()
+        - void useListOfItemsEditBtn()
+        - void useListOfItemsRmvBtn()
+}
+Application -- MainWindowController
+
+class ItemPromptADDController {
+    @FXML items
+      - Button itemPromptOkADDBtn
+      - DatePicker itemDateBoxADD
+      - TextField itemDetailsTextBoxADD
+      - TextField itemNameTextBoxADD
+      - Label errorMsgDateADD
+--
+    @FXML actions
+      - void createItem()
+}
+MainWindowController -- ItemPromptADDController
+
+class ItemPromptEDITController {
+    @FXML items
+      - Button itemPromptOkEDITBtn
+      - CheckBox IsCompleteBtn
+      - DatePicker itemDateBoxEDIT
+      - TextField itemDetailsTextBoxEDIT
+      - TextField itemNameTextBoxEDIT
+      Label errorMsgDateEDIT
+--
+    @FXML actions
+      - void editItem()
+}
+MainWindowController -- ItemPromptEDITController
+
+class SavePromptController {
+    @FXML items
+      - TextField savePath;
+      - TextField fileNameText;
+      - Button fileSaveOkBtn;
+--
+    @FXML actions
+      - void saveList()
+}
+MainWindowController -- SavePromptController
+
+class UploadPromptController {
+    @FXML items
+      - TextField uploadPath;
+      - Button fileUploadOkBtn;
+--
+    @FXML actions
+      - void uploadList()
+}
+
+MainWindowController -- UploadPromptController
+@enduml
