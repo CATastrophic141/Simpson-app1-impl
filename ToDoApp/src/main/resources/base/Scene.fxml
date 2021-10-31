@@ -24,7 +24,7 @@
                         <Button id="ListOfItemsEditBtn" fx:id="listOfItemsEditBtn" layoutX="585.0" layoutY="300.0" mnemonicParsing="false" onAction="#useListOfItemsEditBtn" text="Edit" AnchorPane.leftAnchor="575.0" AnchorPane.topAnchor="300.0" />
                         <Button id="ListOfItemsAddBtn" fx:id="listOfItemsAddBtn" layoutX="530.0" layoutY="300.0" mnemonicParsing="false" onAction="#useListOfItemsAddBtn" prefHeight="30.0" prefWidth="46.0" text="Add" AnchorPane.leftAnchor="525.0" AnchorPane.topAnchor="300.0" />
                         <Label layoutX="14.0" layoutY="5.0" text="Things to do:" AnchorPane.topAnchor="5.0" />
-                        <Button fx:id="selectItemButton" layoutX="526.0" layoutY="160.0" mnemonicParsing="false" text="Select" AnchorPane.leftAnchor="525.0" AnchorPane.topAnchor="160.0" />
+                        <Button fx:id="selectItemButton" layoutX="526.0" layoutY="160.0" mnemonicParsing="false" onAction="#selectFromListOfItems" text="Select" AnchorPane.leftAnchor="525.0" AnchorPane.topAnchor="160.0" />
                     </children>
                 </AnchorPane>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="340.0" prefWidth="1000.0">

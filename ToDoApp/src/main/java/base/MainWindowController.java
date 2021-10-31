@@ -1,3 +1,8 @@
+/*
+ *  UCF COP3330 Summer 2021 TodoListApplication Assignment 1 Solution
+ *  Copyright 2021 Rylan Simpson
+ */
+
 package base;
 
 import javafx.event.ActionEvent;
@@ -13,11 +18,9 @@ import java.util.ArrayList;
 public class MainWindowController{
     //ToDoItem arraylist for storage
     ArrayList<ToDoItem> listOfItems;
-    boolean showCompleted;
-    boolean showIncomplete;
-
-    /*All present active code is to allow
-     the sub-windows to be accessed in this pseudocode stage*/
+    ToDoItem currentItem;
+    boolean showCompleted = true;
+    boolean showIncomplete = true;
 
     @FXML
     private Button saveBtn;
@@ -63,6 +66,8 @@ public class MainWindowController{
     @FXML
     private void setNameText(){
         //Set the label's text to the name of the item
+        if (currentItem.getItemName() != null)
+            nameText.setText(currentItem.getItemName());
     }
 
     @FXML
@@ -71,6 +76,8 @@ public class MainWindowController{
     @FXML
     private void setDateText(){
         //Set the label's text as the date of from the to-do item's information package
+        if (currentItem.getDueDate() != null)
+            nameText.setText(currentItem.getDueDate());
     }
 
     @FXML
@@ -79,6 +86,8 @@ public class MainWindowController{
     @FXML
     private void setDetailText(){
         //Set the label's text as the date of from the to-do item's information package
+        if (currentItem.getItemDetails() != null)
+            nameText.setText(currentItem.getItemDetails());
     }
 
     @FXML
@@ -86,7 +95,8 @@ public class MainWindowController{
 
     @FXML
     private void setHideCompletedBtn(){
-        //Set the showCompleted boolean to false
+        //Change hide completion status
+        showCompleted = !showCompleted;
     }
 
     @FXML
@@ -94,20 +104,28 @@ public class MainWindowController{
 
     @FXML
     private void setHideIncompleteBtn(){
-        //Set the showIncomplete boolean to false
+        //Change hide incomplete status
+        showIncomplete = !showIncomplete;
     }
 
     @FXML
     private Button selectItemButton;
 
     @FXML
-    private void selectFromListOfItems(){
+    private void selectFromListOfItems(ActionEvent event){
         //Get data from the selected item in list
+        int currentIndex = listOfItemsList.getSelectionModel().getSelectedIndex();
+        if (currentIndex != -1) {
+            currentItem = listOfItemsList.getSelectionModel().getSelectedItem();
+            setNameText();
+            setDateText();
+            setDetailText();
+        }
     }
 
     //Display complete and incomplete based on boolean "show values"
     @FXML
-    private ListView<?> listOfItemsList;
+    private ListView<ToDoItem> listOfItemsList;
 
     @FXML
     private Button listOfItemsAddBtn;
@@ -153,5 +171,8 @@ public class MainWindowController{
     @FXML
     private void useListOfItemsRmvBtn(){
         //Remove item from arraylist
+        int currentIndex = listOfItemsList.getSelectionModel().getSelectedIndex();
+        if (currentIndex != -1)
+            listOfItemsList.getItems().remove(currentIndex);
     }
 }
