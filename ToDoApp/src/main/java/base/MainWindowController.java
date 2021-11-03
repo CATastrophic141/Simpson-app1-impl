@@ -21,14 +21,14 @@ public class MainWindowController{
     * Try preloading all scenes, and swap between scenes
    */
 
-    //ToDoItem arraylist for storage
+    //Storage variables
     ArrayList<ToDoItem> listOfItems;
     ToDoItem currentItem;
     boolean showCompleted = true;
     boolean showIncomplete = true;
 
     @FXML
-    private Button saveBtn;
+    private MenuItem saveBtn;
 
     @FXML
     private void saveList(ActionEvent event) {
@@ -47,7 +47,7 @@ public class MainWindowController{
     }
 
     @FXML
-    private Button uploadBtn;
+    private MenuItem uploadBtn;
 
     @FXML
     private void uploadList(ActionEvent event) {
@@ -66,26 +66,6 @@ public class MainWindowController{
     }
 
     @FXML
-    private Label dateText;
-
-    @FXML
-    private void setDateText(){
-        //Set the label's text as the date of from the to-do item's information package
-        if (currentItem.getDueDate() != null)
-            dateText.setText(currentItem.getDueDate());
-    }
-
-    @FXML
-    private Label detailText;
-
-    @FXML
-    private void setDetailText(){
-        //Set the label's text as the date of from the to-do item's information package
-        if (currentItem.getItemDetails() != null)
-            detailText.setText(currentItem.getItemDetails());
-    }
-
-    @FXML
     private CheckBox hideCompletedBtn;
 
     @FXML
@@ -100,84 +80,44 @@ public class MainWindowController{
 
     @FXML
     private void setHideIncompleteBtn(ActionEvent event){
-        //Change hide incomplete status
+        //Change hide completion status
         showIncomplete = !showIncomplete;
         System.out.printf("Set showIncomplete status to %b%n", showIncomplete);
     }
 
     @FXML
-    private Button selectItemButton;
+    private Label errorLabel;
 
     @FXML
-    private void selectFromListOfItems(ActionEvent event){
-        //Get data from the selected item in list
-        int currentIndex = listOfItemsList.getSelectionModel().getSelectedIndex();
-        if (currentIndex != -1) {
-            currentItem = listOfItemsList.getSelectionModel().getSelectedItem();
-            setDateText();
-            setDetailText();
-        }
-    }
-
-    //Display complete and incomplete based on boolean "show values"
-    @FXML
-    protected ListView<ToDoItem> listOfItemsList;
+    private CheckBox completionStatusBtn;
 
     @FXML
-    private Button listOfItemsAddBtn;
+    private DatePicker itemDateBox;
 
     @FXML
-    private void useListOfItemsAddBtn(ActionEvent event){
-        //Open prompt window
+    private TextField itemDetailBox;
 
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader();
-            fxmlLoader.setLocation(getClass().getResource("ItemPrompt_ADD.fxml"));
-            Parent root1 = fxmlLoader.load();
+    @FXML
+    private TextField itemNameBox;
 
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root1));
-            stage.setTitle("Add Item");
-            stage.show();
-        }
-        catch(Exception e) {
-            e.printStackTrace();
-        }
+    @FXML
+    private Button itemAddBtn;
+
+    @FXML
+    private Button itemRemoveBtn;
+
+    @FXML
+    private TableView<?> itemTable;
+
+    @FXML
+    void useListOfItemsAddBtn(ActionEvent event) {
+        //Take information from data boxes and add item to table
+
     }
 
     @FXML
-    public void addItem(ToDoItem item){
-        //listOfItems.add(item)
-        listOfItemsList.getItems().add(item);
+    void useListOfItemsRmvBtn(ActionEvent event) {
+        //Remove item from table
     }
 
-    @FXML
-    private Button listOfItemsEditBtn;
-
-    @FXML
-    private void useListOfItemsEditBtn(ActionEvent event){
-        //Open prompt window
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("ItemPrompt_EDIT.fxml"));
-            Parent root1 = fxmlLoader.load();
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root1));
-            stage.setTitle("Edit Item");
-            stage.show();
-        }
-        catch(Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @FXML
-    private Button listOfItemsRmvBtn;
-
-    @FXML
-    private void useListOfItemsRmvBtn(ActionEvent event){
-        //Remove item from arraylist
-        int currentIndex = listOfItemsList.getSelectionModel().getSelectedIndex();
-        if (currentIndex != -1)
-            listOfItemsList.getItems().remove(currentIndex);
-    }
 }
