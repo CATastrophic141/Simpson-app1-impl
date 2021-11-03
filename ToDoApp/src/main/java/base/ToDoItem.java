@@ -1,32 +1,25 @@
 package base;
 
-import java.util.ArrayList;
-
 class ToDoItem {
-    private String itemName;
     private String itemDueDate;
     private String itemDetails;
     boolean isCompleteStatus;
 
-    public ToDoItem(String name, String date, String details) {
+    public ToDoItem(String date, String details) {
         //Set instance details to passed arguments
-    }
-
-    public void setItemName(String name){
-        //Set item name
+        itemDueDate = date;
+        itemDetails = details;
+        isCompleteStatus = false;
     }
 
     public void setDueDate(String date){
         //Set due date
+        itemDueDate = date;
     }
 
     public void setDetails(String details){
         //Set item details
-    }
-
-    public String getItemName(){
-        //Get item name
-        return itemName;
+        itemDetails = details;
     }
 
     public String getDueDate(){
@@ -41,6 +34,7 @@ class ToDoItem {
 
     public void setCompleteStatus(){
         //Set item complete status to true
+        isCompleteStatus = !isCompleteStatus;
     }
 }
 

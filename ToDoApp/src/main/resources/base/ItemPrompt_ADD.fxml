@@ -6,24 +6,13 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity"
-            maxWidth="-Infinity"
-            minHeight="-Infinity"
-            minWidth="-Infinity"
-            prefHeight="213.0"
-            prefWidth="600.0"
-            stylesheets="@Styles.css"
-            xmlns="http://javafx.com/javafx/17"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="base.ItemPromptADDController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="172.0" prefWidth="600.0" stylesheets="@Styles.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="base.ItemPromptADDController">
    <children>
-      <Label layoutX="14.0" layoutY="7.0" text="Enter item name:" />
-      <Label layoutX="14.0" layoutY="57.0" text="Enter due date:" />
-      <Label layoutX="14.0" layoutY="109.0" text="Enter Item description:" />
-      <TextField fx:id="itemNameTextBoxADD" layoutX="14.0" layoutY="22.0" promptText="Item name" />
-      <TextField fx:id="itemDetailsTextBoxADD" alignment="TOP_LEFT" layoutX="14.0" layoutY="127.0" minHeight="-Infinity" prefHeight="130.0" prefWidth="570.0" promptText="Item description" />
-      <Button fx:id="itemPromptOkADDBtn" layoutX="556.0" layoutY="176.0" mnemonicParsing="false" text="Ok" />
-      <DatePicker fx:id="itemDateBoxADD" layoutX="16.0" layoutY="76.0" promptText="Due date" />
+      <Label layoutX="14.0" layoutY="5.0" text="Enter due date:" />
+      <Label layoutX="14.0" layoutY="60.0" text="Enter Item description:" />
+      <TextField fx:id="itemDetailsTextBoxADD" alignment="TOP_LEFT" layoutX="14.0" layoutY="78.0" minHeight="-Infinity" prefHeight="130.0" prefWidth="570.0" promptText="Item description" />
+      <Button fx:id="itemPromptOkADDBtn" layoutX="545.0" layoutY="130.0" mnemonicParsing="false" onAction="#createItem" text="Ok" />
+      <DatePicker fx:id="itemDateBoxADD" layoutX="14.0" layoutY="24.0" promptText="Due date" />
       <Label fx:id="errorMsgDateADD" layoutX="202.0" layoutY="82.0" text=" " />
    </children>
 </AnchorPane>

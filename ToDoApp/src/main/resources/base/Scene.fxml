@@ -16,8 +16,8 @@
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                     <children>
                         <ListView fx:id="listOfItemsList" layoutX="10.0" layoutY="25.0" prefHeight="310.0" prefWidth="500.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="25.0" />
-                        <CheckBox id="HideIncompleteBtn" fx:id="hideIncompleteBtn" layoutX="520.0" layoutY="26.0" mnemonicParsing="false" text="Hide Incomplete" AnchorPane.topAnchor="25.0" />
-                        <CheckBox id="HideCompletedBtn" fx:id="hideCompletedBtn" layoutX="520.0" layoutY="52.0" mnemonicParsing="false" text="Hide Completed" AnchorPane.topAnchor="50.0" />
+                        <CheckBox id="HideIncompleteBtn" fx:id="hideIncompleteBtn" layoutX="520.0" layoutY="26.0" mnemonicParsing="false" onAction="#setHideIncompleteBtn" text="Hide Incomplete" AnchorPane.topAnchor="25.0" />
+                        <CheckBox id="HideCompletedBtn" fx:id="hideCompletedBtn" layoutX="520.0" layoutY="52.0" mnemonicParsing="false" onAction="#setHideCompletedBtn" text="Hide Completed" AnchorPane.topAnchor="50.0" />
                         <Button fx:id="saveBtn" layoutX="906.0" layoutY="24.0" mnemonicParsing="false" onAction="#saveList" text="Save" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="30.0" />
                         <Button fx:id="uploadBtn" layoutX="890.0" layoutY="65.0" mnemonicParsing="false" onAction="#uploadList" text="Upload" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="65.0" />
                         <Button id="ListOfItemsRmvBtn" fx:id="listOfItemsRmvBtn" layoutX="640.0" layoutY="300.0" mnemonicParsing="false" onAction="#useListOfItemsRmvBtn" text="Remove" AnchorPane.leftAnchor="624.0" AnchorPane.topAnchor="300.0" />
@@ -30,7 +30,6 @@
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="340.0" prefWidth="1000.0">
                     <children>
                         <Label id="DateText" fx:id="dateText" alignment="CENTER" layoutX="14.0" layoutY="14.0" text="DATE" textAlignment="CENTER" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="25.0" />
-                        <Label id="ItemNameText" fx:id="nameText" alignment="CENTER" layoutX="285.0" layoutY="5.0" text="ITEM NAME" textAlignment="CENTER" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="5.0" />
                         <Label id="DetailText" fx:id="detailText" alignment="CENTER" layoutX="10.0" layoutY="42.0" text="DETAILS" textAlignment="CENTER" AnchorPane.bottomAnchor="18.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="43.0" />
                         <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="555.0" layoutY="210.0" opacity="0.65" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.05" AnchorPane.rightAnchor="0.500000000000455">
                             <image>

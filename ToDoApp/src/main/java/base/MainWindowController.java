@@ -16,6 +16,11 @@ import javafx.stage.Stage;
 import java.util.ArrayList;
 
 public class MainWindowController{
+
+    /*
+    * Try preloading all scenes, and swap between scenes
+   */
+
     //ToDoItem arraylist for storage
     ArrayList<ToDoItem> listOfItems;
     ToDoItem currentItem;
@@ -61,23 +66,13 @@ public class MainWindowController{
     }
 
     @FXML
-    private Label nameText;
-
-    @FXML
-    private void setNameText(){
-        //Set the label's text to the name of the item
-        if (currentItem.getItemName() != null)
-            nameText.setText(currentItem.getItemName());
-    }
-
-    @FXML
     private Label dateText;
 
     @FXML
     private void setDateText(){
         //Set the label's text as the date of from the to-do item's information package
         if (currentItem.getDueDate() != null)
-            nameText.setText(currentItem.getDueDate());
+            dateText.setText(currentItem.getDueDate());
     }
 
     @FXML
@@ -87,25 +82,27 @@ public class MainWindowController{
     private void setDetailText(){
         //Set the label's text as the date of from the to-do item's information package
         if (currentItem.getItemDetails() != null)
-            nameText.setText(currentItem.getItemDetails());
+            detailText.setText(currentItem.getItemDetails());
     }
 
     @FXML
     private CheckBox hideCompletedBtn;
 
     @FXML
-    private void setHideCompletedBtn(){
+    private void setHideCompletedBtn(ActionEvent event){
         //Change hide completion status
         showCompleted = !showCompleted;
+        System.out.printf("Set showCompleted status to %b%n", showCompleted);
     }
 
     @FXML
     private CheckBox hideIncompleteBtn;
 
     @FXML
-    private void setHideIncompleteBtn(){
+    private void setHideIncompleteBtn(ActionEvent event){
         //Change hide incomplete status
         showIncomplete = !showIncomplete;
+        System.out.printf("Set showIncomplete status to %b%n", showIncomplete);
     }
 
     @FXML
@@ -117,7 +114,6 @@ public class MainWindowController{
         int currentIndex = listOfItemsList.getSelectionModel().getSelectedIndex();
         if (currentIndex != -1) {
             currentItem = listOfItemsList.getSelectionModel().getSelectedItem();
-            setNameText();
             setDateText();
             setDetailText();
         }
@@ -125,17 +121,20 @@ public class MainWindowController{
 
     //Display complete and incomplete based on boolean "show values"
     @FXML
-    private ListView<ToDoItem> listOfItemsList;
+    protected ListView<ToDoItem> listOfItemsList;
 
     @FXML
     private Button listOfItemsAddBtn;
 
     @FXML
-    private void useListOfItemsAddBtn(){
+    private void useListOfItemsAddBtn(ActionEvent event){
         //Open prompt window
+
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("ItemPrompt_ADD.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getResource("ItemPrompt_ADD.fxml"));
             Parent root1 = fxmlLoader.load();
+
             Stage stage = new Stage();
             stage.setScene(new Scene(root1));
             stage.setTitle("Add Item");
@@ -147,10 +146,16 @@ public class MainWindowController{
     }
 
     @FXML
+    public void addItem(ToDoItem item){
+        //listOfItems.add(item)
+        listOfItemsList.getItems().add(item);
+    }
+
+    @FXML
     private Button listOfItemsEditBtn;
 
     @FXML
-    private void useListOfItemsEditBtn(){
+    private void useListOfItemsEditBtn(ActionEvent event){
         //Open prompt window
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("ItemPrompt_EDIT.fxml"));
@@ -169,7 +174,7 @@ public class MainWindowController{
     private Button listOfItemsRmvBtn;
 
     @FXML
-    private void useListOfItemsRmvBtn(){
+    private void useListOfItemsRmvBtn(ActionEvent event){
         //Remove item from arraylist
         int currentIndex = listOfItemsList.getSelectionModel().getSelectedIndex();
         if (currentIndex != -1)
