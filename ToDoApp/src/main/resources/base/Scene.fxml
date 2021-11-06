@@ -17,10 +17,8 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="584.0" prefWidth="1000.0" stylesheets="@Styles.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="base.MainWindowController">
     <children>
-            <CheckBox id="HideIncompleteBtn" fx:id="hideIncompleteBtn" layoutX="128.0" layoutY="450.0" mnemonicParsing="false" onAction="#setHideIncompleteBtn" text="Hide Incomplete" AnchorPane.topAnchor="450.0" />
-            <CheckBox id="HideCompletedBtn" fx:id="hideCompletedBtn" layoutX="14.0" layoutY="450.0" mnemonicParsing="false" onAction="#setHideCompletedBtn" text="Hide Completed" AnchorPane.topAnchor="450.0" />
-            <Button id="ListOfItemsRmvBtn" fx:id="itemRemoveBtn" layoutX="73.0" layoutY="486.0" mnemonicParsing="false" onAction="#deleteItemFromList" text="Remove" AnchorPane.leftAnchor="73.0" AnchorPane.topAnchor="486.0" />
-            <Button id="ListOfItemsAddBtn" fx:id="itemAddBtn" layoutX="21.0" layoutY="486.0" mnemonicParsing="false" onAction="#addItemToList" prefHeight="30.0" prefWidth="46.0" text="Add" AnchorPane.leftAnchor="21.0" AnchorPane.topAnchor="486.0" />
+            <Button id="ListOfItemsRmvBtn" fx:id="itemRemoveBtn" layoutX="191.0" layoutY="488.0" mnemonicParsing="false" onAction="#deleteItemFromList" text="Remove" AnchorPane.leftAnchor="191.0" AnchorPane.topAnchor="488.0" />
+            <Button id="ListOfItemsAddBtn" fx:id="itemAddBtn" layoutX="86.0" layoutY="488.0" mnemonicParsing="false" onAction="#addItemToList" prefHeight="30.0" prefWidth="46.0" text="Add" AnchorPane.leftAnchor="86.0" AnchorPane.topAnchor="488.0" />
             <ImageView fitHeight="50.0" fitWidth="50.0" opacity="0.65" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.05" AnchorPane.rightAnchor="0.5">
                 <image>
                     <Image url="@../media/TreeIcon.png" />
@@ -39,8 +37,8 @@
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
-              <MenuItem fx:id="uploadBtn" mnemonicParsing="false" text="Upload" />
-                  <MenuItem fx:id="saveBtn" mnemonicParsing="false" text="Save" />
+              <MenuItem fx:id="uploadBtn" mnemonicParsing="false" onAction="#uploadList" text="Upload" />
+                  <MenuItem fx:id="saveBtn" mnemonicParsing="false" onAction="#saveList" text="Save" />
             </items>
           </Menu>
         </menus>
@@ -53,8 +51,13 @@
             <Font name="Corbel Light" size="20.0" />
          </font>
       </Label>
-      <DatePicker fx:id="itemDateBox" layoutX="182.0" layoutY="530.0" promptText="Due Date (DD/MM/YYYY)" />
-      <Label fx:id="errorLabel" layoutX="182.0" layoutY="493.0" text=" " />
-      <Button id="ListOfItemsRmvBtn" fx:id="clearAllItemsBtn" layoutX="150.0" layoutY="486.0" mnemonicParsing="false" onAction="#clearList" text="Clear All" />
+      <DatePicker fx:id="itemDateBox" layoutX="182.0" layoutY="530.0" promptText="Due Date (YYYY-MM-DD)" />
+      <Label fx:id="errorLabel" layoutX="355.0" layoutY="495.0" prefHeight="18.0" prefWidth="400.0" textFill="#b40808" />
+      <Button id="ListOfItemsRmvBtn" fx:id="clearAllItemsBtn" layoutX="267.0" layoutY="488.0" mnemonicParsing="false" onAction="#clearList" text="Clear All" />
+      <Button fx:id="itemEditBtn" layoutX="137.0" layoutY="488.0" mnemonicParsing="false" onAction="#editItemFromList" text="Edit" />
+      <Button fx:id="itemSelectBtn" layoutX="23.0" layoutY="488.0" mnemonicParsing="false" onAction="#selectItemFromList" text="Select" />
+      <Button fx:id="showCompletedBtn" layoutX="23.0" layoutY="449.0" mnemonicParsing="false" onAction="#setShowCompleted" text="Show Completed" />
+      <Button fx:id="showIncompleteBtn" layoutX="156.0" layoutY="449.0" mnemonicParsing="false" onAction="#setShowIncomplete" text="Show Incomplete" />
+      <Button fx:id="showAllBtn" layoutX="290.0" layoutY="449.0" mnemonicParsing="false" onAction="#setShowAll" text="Show All" />
     </children>
 </AnchorPane>

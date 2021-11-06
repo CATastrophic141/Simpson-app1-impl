@@ -5,57 +5,51 @@
 
 package base;
 
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javafx.util.Callback;
+import javafx.util.StringConverter;
 
+import java.io.File;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class MainWindowController implements Initializable {
-
-    /*
-    * Try preloading all scenes, and swap between scenes
-   */
-
     //Storage variables
-    AppResource resources = new AppResource();
+    List<ToDoItem> allItems = new ArrayList<>();
+    ObservableList<ToDoItem> viewedItems = FXCollections.observableArrayList();
 
     @FXML
     private MenuItem saveBtn;
 
     @FXML
     private void saveList(ActionEvent event) {
+        String filePath;
         //Open save window
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FileSavePrompt.fxml"));
-            Parent root1 = fxmlLoader.load();
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root1));
-            stage.setTitle("File Save");
-            stage.show();
+            FileChooser fileChooser = new FileChooser();
+            File file = fileChooser.showOpenDialog(null);
+            if (file != null) {
+                filePath = file.getPath();
+                System.out.print(filePath);
+            }
         }
-        catch(Exception e) {
-            e.printStackTrace();
+        catch (Exception e){
+            //Do nothing
         }
     }
 
@@ -64,38 +58,57 @@ public class MainWindowController implements Initializable {
 
     @FXML
     private void uploadList(ActionEvent event) {
+        String filePath;
         //Open upload window
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FileUploadPrompt.fxml"));
-            Parent root1 = fxmlLoader.load();
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root1));
-            stage.setTitle("File Upload");
-            stage.show();
+            FileChooser fileChooser = new FileChooser();
+            File file = fileChooser.showOpenDialog(null);
+            if (file != null) {
+                filePath = file.getPath();
+                System.out.print(filePath);
+            }
         }
-        catch(Exception e) {
-            e.printStackTrace();
+        catch (Exception e){
+            //Do nothing
         }
     }
 
     @FXML
-    private CheckBox hideCompletedBtn;
+    private Button showCompletedBtn;
 
     @FXML
-    private void setHideCompletedBtn(ActionEvent event){
-        //Change hide completion status
-        resources.showCompleted = !resources.showCompleted;
-        System.out.printf("Set showCompleted status to %b%n", resources.showCompleted);
+    private void setShowCompleted(ActionEvent event){
+        viewedItems.clear();
+        for (ToDoItem item : allItems) {
+            if (Boolean.TRUE.equals(item.getCompletionStatusBoolean())) {
+                viewedItems.add(item);
+            }
+        }
+        itemTable.refresh();
     }
 
     @FXML
-    private CheckBox hideIncompleteBtn;
+    private Button showIncompleteBtn;
 
     @FXML
-    private void setHideIncompleteBtn(ActionEvent event){
-        //Change hide completion status
-        resources.showIncomplete = !resources.showIncomplete;
-        System.out.printf("Set showIncomplete status to %b%n", resources.showIncomplete);
+    private void setShowIncomplete(ActionEvent event){
+        viewedItems.clear();
+        for (ToDoItem item : allItems) {
+            if (Boolean.FALSE.equals(item.getCompletionStatusBoolean())) {
+                viewedItems.add(item);
+            }
+        }
+        itemTable.refresh();
+    }
+
+    @FXML
+    private Button showAllBtn;
+
+    @FXML
+    private void setShowAll(ActionEvent event){
+        viewedItems.clear();
+        viewedItems.addAll(allItems);
+        itemTable.refresh();
     }
 
     @FXML
@@ -112,6 +125,12 @@ public class MainWindowController implements Initializable {
 
     @FXML
     private TextField itemNameBox;
+
+    @FXML
+    private Button itemSelectBtn;
+
+    @FXML
+    private Button itemEditBtn;
 
     @FXML
     private Button itemAddBtn;
@@ -136,42 +155,76 @@ public class MainWindowController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         //Set up columns for custom use
-
         completionColumn.setCellValueFactory(new PropertyValueFactory<>("CompletionStatus"));
 
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("itemName"));
-        nameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
-        nameColumn.setOnEditCommit(
-                t -> (t.getTableView().getItems().get(
-                        t.getTablePosition().getRow())
-                ).setItemName(t.getNewValue())
-        );
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("YYYY-MM-DD");
+        //Alter date picker display format
+        final String pattern = "yyyy-MM-dd";
+        StringConverter<LocalDate> converter = new StringConverter<>() {
+            final DateTimeFormatter dateFormatter =
+                    DateTimeFormatter.ofPattern(pattern);
+            @Override
+            public String toString(LocalDate date) {
+                if (date != null) {
+                    return dateFormatter.format(date);
+                } else {
+                    return "";
+                }
+            }
+            @Override
+            public LocalDate fromString(String string) {
+                if (string != null && !string.isEmpty()) {
+                    return LocalDate.parse(string, dateFormatter);
+                } else {
+                    return null;
+                }
+            }
+        };
+        itemDateBox.setConverter(converter);
         dateColumn.setCellValueFactory(new PropertyValueFactory<>("itemDueDate"));
-
+        itemDateBox.getEditor().setDisable(true);
 
         detailColumn.setCellValueFactory(new PropertyValueFactory<>("itemDetails"));
-        detailColumn.setCellFactory(TextFieldTableCell.forTableColumn());
-        detailColumn.setOnEditCommit(
-                t -> (t.getTableView().getItems().get(
-                        t.getTablePosition().getRow())
-                ).setItemDetails(t.getNewValue())
-        );
 
+        ToDoItem exampleItem = new ToDoItem("Example", LocalDate.of(2000, Month.JANUARY, 1), "This is an example item");
 
-        itemTable.setItems(getItemList());
+        viewedItems.add(exampleItem);
+        allItems.add(exampleItem);
+        itemTable.setItems(getViewedItemList());
     }
 
-    public ObservableList<ToDoItem> getItemList() {
-        resources.items.add(new ToDoItem("Example", LocalDate.of(2000, Month.JANUARY, 1), "This is an example item"));
-        return resources.items;
+    public ObservableList<ToDoItem> getViewedItemList() {
+        return viewedItems;
+    }
+
+    @FXML
+    public void selectItemFromList(ActionEvent event) {
+        int selectionIndex = itemTable.getSelectionModel().getSelectedIndex();
+
+        if (selectionIndex == -1) {
+            errorLabel.setText("Please select an item to edit");
+            return;
+        }
+
+        ToDoItem item = itemTable.getItems().get(selectionIndex);
+
+        String name = item.getItemName();
+        String details = item.getItemDetails();
+        LocalDate dueDate = item.getItemDueDate();
+        Boolean status = item.getCompletionStatusBoolean();
+
+        itemNameBox.setText(name);
+        itemDetailBox.setText(details);
+        itemDateBox.setValue(dueDate);
+        completionStatusBtn.setSelected(status);
+        errorLabel.setText(" ");
     }
 
     @FXML
     public void addItemToList(ActionEvent event) {
         String name;
-        LocalDate date;
+        LocalDate date = null;
         String details;
         boolean isCompleted;
 
@@ -192,37 +245,113 @@ public class MainWindowController implements Initializable {
             details = itemDetailBox.getText();
         }
 
-        //Save date, invalid values are ignored
-        date = itemDateBox.getValue();
+        //Save date if it is valid
+        if (itemDateBox.getValue() != null){
+            date = itemDateBox.getValue();
+        }
+
 
         //Get completion status
         isCompleted = completionStatusBtn.isSelected();
 
         ToDoItem item = new ToDoItem(name, date, details, isCompleted);
-        resources.items.add(item);
+        viewedItems.add(item);
+        allItems.add(item);
         itemNameBox.clear();
         itemDateBox.getEditor().clear();
         itemDateBox.setValue(null);
         itemDetailBox.clear();
         completionStatusBtn.setSelected(false);
+        errorLabel.setText(" ");
+    }
+
+    @FXML
+    public void editItemFromList(ActionEvent event) {
+
+        int selectionIndex = itemTable.getSelectionModel().getSelectedIndex();
+
+        if (selectionIndex == -1) {
+            errorLabel.setText("Please select an item to edit");
+            return;
+        }
+
+        ToDoItem tempItem = itemTable.getItems().get(selectionIndex);
+
+        int itemIDIndex = getIndexOfID(tempItem.getItemID());
+
+        String name;
+        LocalDate date = null;
+        String details;
+        boolean isCompleted;
+
+        //Save name if it is valid
+        if (itemNameBox.getText().length() < 1 || itemNameBox.getText().length() > 256) {
+            errorLabel.setText("Please enter a valid name for the item. ");
+            return;
+        } else {
+            name = itemNameBox.getText();
+        }
+
+        //Save details if they are valid
+        if (itemDetailBox.getText().length() < 1 || itemDetailBox.getText().length() > 256) {
+            errorLabel.setText("Please enter valid details for the item. ");
+            return;
+        }
+        else {
+            details = itemDetailBox.getText();
+        }
+
+        //Save date if it is valid
+        if (itemDateBox.getValue() != null){
+            date = itemDateBox.getValue();
+        }
+
+        //Get completion status
+        isCompleted = completionStatusBtn.isSelected();
+
+        ToDoItem item = new ToDoItem(name, date, details, isCompleted);
+
+        viewedItems.remove(selectionIndex);
+        allItems.remove(itemIDIndex);
+        viewedItems.add(item);
+        allItems.add(item);
+        itemNameBox.clear();
+        itemDateBox.getEditor().clear();
+        itemDateBox.setValue(null);
+        itemDetailBox.clear();
+        completionStatusBtn.setSelected(false);
+        errorLabel.setText(" ");
     }
 
     @FXML
     public void deleteItemFromList(ActionEvent event) {
-            int selectionIndex = itemTable.getSelectionModel().getSelectedIndex();
-            resources.items.remove(selectionIndex);
+        int selectionIndex = itemTable.getSelectionModel().getSelectedIndex();
+
+        ToDoItem tempItem = itemTable.getItems().get(selectionIndex);
+        int itemIDIndex = getIndexOfID(tempItem.getItemID());
+
+        viewedItems.remove(selectionIndex);
+        allItems.remove(itemIDIndex);
+        errorLabel.setText(" ");
     }
 
     @FXML
     void clearList(ActionEvent event) {
         itemTable.getItems().clear();
+        allItems.clear();
+        viewedItems.clear();
+        errorLabel.setText(" ");
     }
 
+    private int getIndexOfID(int id) {
+        //Loop through items and retrieve index of matching ID
+        for(int i = 0; i < allItems.size(); i++) {
+            if(allItems.get(i).getItemID() == id){
+                return i;
+            }
+        }
+        //Return invalid counter if item is not found
+        return -1;
+    }
 }
 
-
- class AppResource {
-     ObservableList<ToDoItem> items = FXCollections.observableArrayList();
-     boolean showCompleted = true;
-     boolean showIncomplete = true;
-}
