@@ -28,4 +28,7 @@ To save a list to a file, click on the “**File**” menu button, and then clic
 
 To upload a list from a CheckBoard file, click on the “**File**” menu button, and then click on the “**Upload**” option. A file selection window will appear. Navigate to the where the file is saved, select the item, and then click “**Open**.”
 
+#
 
+## Demo Video:
+https://youtu.be/JUdo0LXGO_0
