@@ -64,7 +64,12 @@ public class MainWindowController implements Initializable {
         for (ToDoItem item : allItems) {
             System.out.printf("%d%n", item.getItemID());
             System.out.printf("%s%n", item.getItemName());
-            System.out.printf("%s%n", item.getItemDueDateString());
+            if (item.getItemDueDate() != null) {
+                System.out.printf("%s%n", item.getItemDueDateString());
+            }
+            else {
+                System.out.printf("No Date%n");
+            }
             System.out.printf("%s%n", item.getItemDetails());
             System.out.print(item.getCompletionStatusBoolean());
             System.out.printf("%n%n");
@@ -120,7 +125,15 @@ public class MainWindowController implements Initializable {
                 fileIn.nextLine();
 
                 name = fileIn.nextLine();
-                dueDate = LocalDate.parse(fileIn.nextLine(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+                //Parse date if it matches format
+                String date = fileIn.nextLine();
+                if (date.matches("^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$")) {
+                    dueDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                }
+                else {
+                    dueDate = null;
+                }
                 details = fileIn.nextLine();
                 isComplete = fileIn.nextBoolean();
 
@@ -244,7 +257,7 @@ public class MainWindowController implements Initializable {
                 if (date != null) {
                     return dateFormatter.format(date);
                 } else {
-                    return "";
+                    return " ";
                 }
             }
             @Override
