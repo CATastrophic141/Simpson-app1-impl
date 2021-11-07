@@ -303,10 +303,12 @@ public class MainWindowController implements Initializable {
         errorLabel.setText(" ");
     }
 
+    //Return true if length is between 1 and 256
     private boolean validateTextSize(int textSize){
         return textSize < 1 || textSize > 256;
     }
 
+    //Method may not be broken down as it relies on conditional early exiting
     @FXML
     private void addItemToList(ActionEvent event) {
         String name;

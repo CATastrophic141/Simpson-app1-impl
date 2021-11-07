@@ -1,3 +1,8 @@
+/*
+ *  UCF COP3330 Fall 2021 Application Assignment 1 Solution
+ *  Copyright 2021 Rylan Simpson
+ */
+
 package base;
 
 import org.junit.jupiter.api.Test;
@@ -14,7 +19,7 @@ class TodoListApplicationTest {
 
     @Test
     void testFileParsing_numItems() throws FileNotFoundException {
-        String filePath = "./testing/Test_in.txt";
+        String filePath = "./docs/testing/Test_in.txt";
         Scanner fileIn = new Scanner(new FileInputStream(filePath));
         int numItems = fileIn.nextInt();
         assertEquals(3, numItems);
@@ -22,7 +27,7 @@ class TodoListApplicationTest {
 
     @Test
     void testFileParsing_itemID() throws FileNotFoundException {
-        String filePath = "./testing/Test_in.txt";
+        String filePath = "./docs/testing/Test_in.txt";
         Scanner fileIn = new Scanner(new FileInputStream(filePath));
 
         fileIn.nextInt();
@@ -32,7 +37,7 @@ class TodoListApplicationTest {
 
     @Test
     void testFileParsing_itemName() throws FileNotFoundException {
-        String filePath = "./testing/Test_in.txt";
+        String filePath = "./docs/testing/Test_in.txt";
         Scanner fileIn = new Scanner(new FileInputStream(filePath));
 
         fileIn.nextInt();
@@ -45,7 +50,7 @@ class TodoListApplicationTest {
 
     @Test
     void testFileParsing_itemDate() throws FileNotFoundException {
-        String filePath = "./testing/Test_in.txt";
+        String filePath = "./docs/testing/Test_in.txt";
         Scanner fileIn = new Scanner(new FileInputStream(filePath));
 
         fileIn.nextInt();
@@ -59,7 +64,7 @@ class TodoListApplicationTest {
 
     @Test
     void testFileParsing_itemDetails() throws FileNotFoundException {
-        String filePath = "./testing/Test_in.txt";
+        String filePath = "./docs/testing/Test_in.txt";
         Scanner fileIn = new Scanner(new FileInputStream(filePath));
 
         fileIn.nextInt();
@@ -74,7 +79,7 @@ class TodoListApplicationTest {
 
     @Test
     void testFileParsing_itemStatus() throws FileNotFoundException {
-        String filePath = "./testing/Test_in.txt";
+        String filePath = "./docs/testing/Test_in.txt";
         Scanner fileIn = new Scanner(new FileInputStream(filePath));
 
         fileIn.nextInt();

@@ -17,6 +17,7 @@ public class TodoListApplication extends javafx.application.Application {
     @Override
     public void start(Stage stage){
         try {
+            //Setup application scene
             Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("Scene.fxml")));
             Scene scene = new Scene(root);
             scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("Styles.css")).toExternalForm());
@@ -30,6 +31,7 @@ public class TodoListApplication extends javafx.application.Application {
         }
     }
 
+    //Launch program
     public static void main(String[] args) {
         launch(args);
     }

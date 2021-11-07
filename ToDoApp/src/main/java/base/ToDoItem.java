@@ -1,3 +1,8 @@
+/*
+ *  UCF COP3330 Fall 2021 Application Assignment 1 Solution
+ *  Copyright 2021 Rylan Simpson
+ */
+
 package base;
 
 import javafx.beans.property.SimpleStringProperty;
@@ -8,6 +13,7 @@ import java.util.Random;
 public class ToDoItem {
     Random rand = new Random();
 
+    //Attributes
     private final int itemID;
     private final SimpleStringProperty itemName;
     private final LocalDate itemDueDate;
@@ -84,6 +90,7 @@ public class ToDoItem {
 class ToDoItemTest {
     Random rand = new Random();
 
+    //Attributes
     private final int itemID;
     private final SimpleStringProperty itemName;
     private final LocalDate itemDueDate;
