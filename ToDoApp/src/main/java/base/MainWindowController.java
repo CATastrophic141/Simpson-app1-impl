@@ -429,6 +429,12 @@ public class MainWindowController implements Initializable {
         //Get the index of the selected row
         int selectionIndex = itemTable.getSelectionModel().getSelectedIndex();
 
+        //If no row is selected, end method
+        if (selectionIndex == -1) {
+            errorLabel.setText("Please select an item to remove");
+            return;
+        }
+
         //Retrieve the selected item
         ToDoItem tempItem = itemTable.getItems().get(selectionIndex);
         //Retrieve the index of the item from the total list
@@ -437,6 +443,7 @@ public class MainWindowController implements Initializable {
         //Remove the item from the observable list and total list
         viewedItems.remove(selectionIndex);
         allItems.remove(itemIDIndex);
+        errorLabel.setText(" ");
     }
 
     @FXML

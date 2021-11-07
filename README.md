@@ -20,6 +20,10 @@ To clear the list, click on the “**Clear All**” button.
 
 The CheckBox program can display items based on their completion status. To display only complete items, click on the “**Show Completed**” button. To display only incomplete items, click on the “**Show incomplete**” button. To display all items, click on the “**Show All**” button.
 
+## Sorting information on the table
+
+To sort the items based on a specific value, click on the header of the column you want to sort by. Sorting will be implemented by descending order, ascending order, or by no sorting order.
+
 ## Saving a list to a file
 
 To save a list to a file, click on the “**File**” menu button, and then click on the “**Save**” option. A file saving window will appear. Navigate to the where the file is intended to be saved, specify a file name, and then click “**Save**.”
