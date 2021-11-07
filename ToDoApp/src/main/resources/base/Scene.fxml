@@ -21,7 +21,7 @@
             <Button id="ListOfItemsAddBtn" fx:id="itemAddBtn" layoutX="86.0" layoutY="488.0" mnemonicParsing="false" onAction="#addItemToList" prefHeight="30.0" prefWidth="46.0" text="Add" AnchorPane.leftAnchor="86.0" AnchorPane.topAnchor="488.0" />
             <ImageView fitHeight="50.0" fitWidth="50.0" opacity="0.65" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.05" AnchorPane.rightAnchor="0.5">
                 <image>
-                    <Image url="@../media/TreeIcon.png" />
+                    <Image url="@media/TreeIcon.png" />
                 </image>
             </ImageView>
             <Label opacity="0.5" text="Powered by SortingTree" AnchorPane.bottomAnchor="0.25" AnchorPane.rightAnchor="33.0" />

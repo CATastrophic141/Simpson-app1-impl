@@ -2,19 +2,19 @@ package base;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.control.CheckBox;
-
 import java.time.LocalDate;
 import java.util.Random;
 
 public class ToDoItem {
     Random rand = new Random();
 
-    private int itemID;
-    private SimpleStringProperty itemName;
-    private LocalDate itemDueDate;
-    private SimpleStringProperty itemDetails;
-    private CheckBox completionStatus;
+    private final int itemID;
+    private final SimpleStringProperty itemName;
+    private final LocalDate itemDueDate;
+    private final SimpleStringProperty itemDetails;
+    private final CheckBox completionStatus;
 
+    //Constructors methods
     public ToDoItem(String name, LocalDate date, String details) {
         //Set instance details to passed arguments
         itemName = new SimpleStringProperty(name);
@@ -22,6 +22,7 @@ public class ToDoItem {
         itemDetails = new SimpleStringProperty(details);
         completionStatus = new CheckBox();
         completionStatus.setSelected(false);
+        //Generate a random ID
         itemID = rand.nextInt();
     }
     public ToDoItem(String name, LocalDate date, String details, boolean selection) {
@@ -31,6 +32,7 @@ public class ToDoItem {
         itemDetails = new SimpleStringProperty(details);
         completionStatus = new CheckBox();
         completionStatus.setSelected(selection);
+        //Generate a random ID
         itemID = rand.nextInt();
     }
 
@@ -44,12 +46,66 @@ public class ToDoItem {
         itemID = id;
     }
 
+    //Getter methods
+
     public String getItemName(){
         return itemName.get();
     }
 
-    public void setItemName(String name) {
-        itemName.set(name);
+
+    public LocalDate getItemDueDate(){
+        return itemDueDate;
+    }
+
+    public String getItemDueDateString() {
+        return itemDueDate.toString();
+    }
+
+    public String getItemDetails(){
+        return itemDetails.get();
+    }
+
+    //This getter is used by the checkbox cell factory
+    public CheckBox getCompletionStatus(){
+        return completionStatus;
+    }
+
+    public Boolean getCompletionStatusBoolean(){
+        return completionStatus.isSelected();
+    }
+
+
+    public int getItemID() {
+        return itemID;
+    }
+}
+
+//Testing version of ToDoItem that does not contain a checkbox item
+class ToDoItemTest {
+    Random rand = new Random();
+
+    private final int itemID;
+    private final SimpleStringProperty itemName;
+    private final LocalDate itemDueDate;
+    private final SimpleStringProperty itemDetails;
+    private final boolean completionStatus;
+
+    //Constructors method
+
+    public ToDoItemTest(String name, LocalDate date, String details, boolean selection) {
+        //Set instance details to passed arguments
+        itemName = new SimpleStringProperty(name);
+        itemDueDate = date;
+        itemDetails = new SimpleStringProperty(details);
+        completionStatus = selection;
+        //Generate a random ID
+        itemID = rand.nextInt();
+    }
+
+    //Getter methods
+
+    public String getItemName(){
+        return itemName.get();
     }
 
     public LocalDate getItemDueDate(){
@@ -60,28 +116,12 @@ public class ToDoItem {
         return itemDueDate.toString();
     }
 
-    public void setItemDueDate(LocalDate date) {
-        itemDueDate = date;
-    }
-
     public String getItemDetails(){
         return itemDetails.get();
     }
 
-    public void setItemDetails(String details) {
-        itemDetails.set(details);
-    }
-
-    public CheckBox getCompletionStatus(){
-        return completionStatus;
-    }
-
     public Boolean getCompletionStatusBoolean(){
-        return completionStatus.isSelected();
-    }
-
-    public void setCompletionStatus(CheckBox selection) {
-        completionStatus = selection;
+        return completionStatus;
     }
 
     public int getItemID() {

@@ -14,7 +14,6 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.FileChooser;
 import javafx.util.StringConverter;
-
 import java.io.*;
 import java.net.URL;
 import java.time.LocalDate;
@@ -33,14 +32,17 @@ public class MainWindowController implements Initializable {
     @FXML
     private MenuItem saveBtn;
 
+    //Save list into a text file
     @FXML
     private void saveList(ActionEvent event) {
         String filePath;
-        //Open save window
+
         try {
+            //Open save window
             FileChooser fileChooser = new FileChooser();
             fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text File", ".txt"));
             File file = fileChooser.showSaveDialog(null);
+            //If file path is chosen, get the path and generate the file
             if (file != null) {
                 filePath = file.getPath();
                 System.out.print(filePath);
@@ -53,9 +55,12 @@ public class MainWindowController implements Initializable {
     }
 
     private void generateSaveFile(String filePath) throws FileNotFoundException {
+        //Set the program to print to the generated file
         PrintStream fileOut = new PrintStream(filePath);
         System.setOut(fileOut);
+        //Specify the number of items within the list
         System.out.printf("%d%n%n", allItems.size());
+        //For every item within the list, print out the details in a list format
         for (ToDoItem item : allItems) {
             System.out.printf("%d%n", item.getItemID());
             System.out.printf("%s%n", item.getItemName());
@@ -64,6 +69,8 @@ public class MainWindowController implements Initializable {
             System.out.print(item.getCompletionStatusBoolean());
             System.out.printf("%n%n");
         }
+        //Set output back to console
+        System.setOut(new PrintStream(new FileOutputStream(FileDescriptor.out)));
     }
 
     @FXML
@@ -72,10 +79,12 @@ public class MainWindowController implements Initializable {
     @FXML
     private void uploadList(ActionEvent event) {
         String filePath;
-        //Open upload window
+
         try {
+            //Open upload window
             FileChooser fileChooser = new FileChooser();
             File file = fileChooser.showOpenDialog(null);
+            //If file path is chosen, get the path and parse the file
             if (file != null) {
                 filePath = file.getPath();
                 System.out.print(filePath);
@@ -93,29 +102,32 @@ public class MainWindowController implements Initializable {
         allItems.clear();
         //Attempt to access file for parsing
         try (Scanner fileIn = new Scanner(new FileInputStream(filePath))){
-            System.out.printf("%n");
+            //Get the number of items stored within the file
             int numItems = fileIn.nextInt();
-            System.out.printf("File found, num items saved: %d %n", numItems);
+
+            //Data storage variables
             int id;
             String name;
             String details;
             LocalDate dueDate;
             boolean isComplete;
-            //for the number of items
+
+            //For the number of items
             for (int  i = 0; i< numItems; i++) {
+                //Parse each piece of item information
                 id = fileIn.nextInt();
-                System.out.printf("id saved: %d %n", id);
-                fileIn.next();
+                //Buffer scanner
+                fileIn.nextLine();
+
                 name = fileIn.nextLine();
-                System.out.printf("name saved: %s %n", name);
                 dueDate = LocalDate.parse(fileIn.nextLine(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-                System.out.printf("date saved: %s %n", dueDate);
                 details = fileIn.nextLine();
-                System.out.printf("details saved: %s %n", details);
                 isComplete = fileIn.nextBoolean();
-                System.out.printf("status saved: %b %n", isComplete);
+
+                //Create a ToDoItem
                 ToDoItem item = new ToDoItem(name, dueDate, details, isComplete, id);
 
+                //Add the item to both the observable list and the total list
                 allItems.add(item);
                 viewedItems.add(item);
             }
@@ -123,6 +135,7 @@ public class MainWindowController implements Initializable {
             //Print error message
             System.out.printf("%nError parsing file%n");
         }
+        //Refresh the tableview
         itemTable.refresh();
     }
 
@@ -131,12 +144,15 @@ public class MainWindowController implements Initializable {
 
     @FXML
     private void setShowCompleted(ActionEvent event){
+        //Clear the table
         viewedItems.clear();
+        //For each item within the complete list, add the item to the observable list if it is completed
         for (ToDoItem item : allItems) {
             if (Boolean.TRUE.equals(item.getCompletionStatusBoolean())) {
                 viewedItems.add(item);
             }
         }
+        //Refresh the table
         itemTable.refresh();
     }
 
@@ -145,12 +161,15 @@ public class MainWindowController implements Initializable {
 
     @FXML
     private void setShowIncomplete(ActionEvent event){
+        //Clear the table
         viewedItems.clear();
+        //For each item within the complete list, add the item to the observable list if it is incomplete
         for (ToDoItem item : allItems) {
             if (Boolean.FALSE.equals(item.getCompletionStatusBoolean())) {
                 viewedItems.add(item);
             }
         }
+        //Refresh the table
         itemTable.refresh();
     }
 
@@ -159,8 +178,11 @@ public class MainWindowController implements Initializable {
 
     @FXML
     private void setShowAll(ActionEvent event){
+        //Clear the list
         viewedItems.clear();
+        //Add all items to the observable list
         viewedItems.addAll(allItems);
+        //Refresh the table
         itemTable.refresh();
     }
 
@@ -212,11 +234,11 @@ public class MainWindowController implements Initializable {
 
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("itemName"));
 
-        //Alter date picker display format
-        final String pattern = "yyyy-MM-dd";
+        //Alter date picker display format to use YYYY-MM-DD format
+        final String PATTERN = "yyyy-MM-dd";
         StringConverter<LocalDate> converter = new StringConverter<>() {
             final DateTimeFormatter dateFormatter =
-                    DateTimeFormatter.ofPattern(pattern);
+                    DateTimeFormatter.ofPattern(PATTERN);
             @Override
             public String toString(LocalDate date) {
                 if (date != null) {
@@ -240,33 +262,40 @@ public class MainWindowController implements Initializable {
 
         detailColumn.setCellValueFactory(new PropertyValueFactory<>("itemDetails"));
 
+        //Add an example item into the initial list
         ToDoItem exampleItem = new ToDoItem("Example", LocalDate.of(2000, Month.JANUARY, 1), "This is an example item");
-
         viewedItems.add(exampleItem);
         allItems.add(exampleItem);
+        //Setup table to use observable list
         itemTable.setItems(getViewedItemList());
     }
 
-    public ObservableList<ToDoItem> getViewedItemList() {
+    //Retrieve the observable list to be used by the table
+    private ObservableList<ToDoItem> getViewedItemList() {
         return viewedItems;
     }
 
     @FXML
-    public void selectItemFromList(ActionEvent event) {
+    private void selectItemFromList(ActionEvent event) {
+        //Retrieve the index of the selected row
         int selectionIndex = itemTable.getSelectionModel().getSelectedIndex();
 
+        //If no row is selected, end method
         if (selectionIndex == -1) {
             errorLabel.setText("Please select an item to edit");
             return;
         }
 
+        //Get the item from the selected row
         ToDoItem item = itemTable.getItems().get(selectionIndex);
 
+        //Get the information from the selected row
         String name = item.getItemName();
         String details = item.getItemDetails();
         LocalDate dueDate = item.getItemDueDate();
         Boolean status = item.getCompletionStatusBoolean();
 
+        //Set the information entry boxes to display the relevant information
         itemNameBox.setText(name);
         itemDetailBox.setText(details);
         itemDateBox.setValue(dueDate);
@@ -274,15 +303,19 @@ public class MainWindowController implements Initializable {
         errorLabel.setText(" ");
     }
 
+    private boolean validateTextSize(int textSize){
+        return textSize < 1 || textSize > 256;
+    }
+
     @FXML
-    public void addItemToList(ActionEvent event) {
+    private void addItemToList(ActionEvent event) {
         String name;
         LocalDate date = null;
         String details;
         boolean isCompleted;
 
         //Save name if it is valid
-        if (itemNameBox.getText().length() < 1 || itemNameBox.getText().length() > 256) {
+        if (validateTextSize(itemNameBox.getText().length())) {
             errorLabel.setText("Please enter a valid name for the item. ");
             return;
         } else {
@@ -290,7 +323,7 @@ public class MainWindowController implements Initializable {
         }
 
         //Save details if they are valid
-        if (itemDetailBox.getText().length() < 1 || itemDetailBox.getText().length() > 256) {
+        if (validateTextSize(itemDetailBox.getText().length())) {
             errorLabel.setText("Please enter valid details for the item. ");
             return;
         }
@@ -307,29 +340,30 @@ public class MainWindowController implements Initializable {
         //Get completion status
         isCompleted = completionStatusBtn.isSelected();
 
+        //Create ToDoItem
         ToDoItem item = new ToDoItem(name, date, details, isCompleted);
+        //Add item to lists
         viewedItems.add(item);
         allItems.add(item);
-        itemNameBox.clear();
-        itemDateBox.getEditor().clear();
-        itemDateBox.setValue(null);
-        itemDetailBox.clear();
-        completionStatusBtn.setSelected(false);
-        errorLabel.setText(" ");
+        //Reset information entry fields
+        resetInformationEntryFields();
     }
 
     @FXML
-    public void editItemFromList(ActionEvent event) {
-
+    private void editItemFromList(ActionEvent event) {
+        //Get the index of the selected row
         int selectionIndex = itemTable.getSelectionModel().getSelectedIndex();
 
+        //If no row is selected, end method
         if (selectionIndex == -1) {
             errorLabel.setText("Please select an item to edit");
             return;
         }
 
+        //Retrieve ToDoItem
         ToDoItem tempItem = itemTable.getItems().get(selectionIndex);
 
+        //Retrieve the index of the item from the total list
         int itemIDIndex = getIndexOfID(tempItem.getItemID());
 
         String name;
@@ -338,7 +372,7 @@ public class MainWindowController implements Initializable {
         boolean isCompleted;
 
         //Save name if it is valid
-        if (itemNameBox.getText().length() < 1 || itemNameBox.getText().length() > 256) {
+        if (validateTextSize(itemNameBox.getText().length())) {
             errorLabel.setText("Please enter a valid name for the item. ");
             return;
         } else {
@@ -346,7 +380,7 @@ public class MainWindowController implements Initializable {
         }
 
         //Save details if they are valid
-        if (itemDetailBox.getText().length() < 1 || itemDetailBox.getText().length() > 256) {
+        if (validateTextSize(itemDetailBox.getText().length())) {
             errorLabel.setText("Please enter valid details for the item. ");
             return;
         }
@@ -362,38 +396,40 @@ public class MainWindowController implements Initializable {
         //Get completion status
         isCompleted = completionStatusBtn.isSelected();
 
+        //Create new ToDoItem
         ToDoItem item = new ToDoItem(name, date, details, isCompleted);
 
+        //Remove duplicate ToDoItem
         viewedItems.remove(selectionIndex);
         allItems.remove(itemIDIndex);
+        //Instantiate edited item
         viewedItems.add(item);
         allItems.add(item);
-        itemNameBox.clear();
-        itemDateBox.getEditor().clear();
-        itemDateBox.setValue(null);
-        itemDetailBox.clear();
-        completionStatusBtn.setSelected(false);
-        errorLabel.setText(" ");
+        //Reset information entry
+        resetInformationEntryFields();
     }
 
     @FXML
-    public void deleteItemFromList(ActionEvent event) {
+    private void deleteItemFromList(ActionEvent event) {
+        //Get the index of the selected row
         int selectionIndex = itemTable.getSelectionModel().getSelectedIndex();
 
+        //Retrieve the selected item
         ToDoItem tempItem = itemTable.getItems().get(selectionIndex);
+        //Retrieve the index of the item from the total list
         int itemIDIndex = getIndexOfID(tempItem.getItemID());
 
+        //Remove the item from the observable list and total list
         viewedItems.remove(selectionIndex);
         allItems.remove(itemIDIndex);
-        errorLabel.setText(" ");
     }
 
     @FXML
     void clearList(ActionEvent event) {
+        //Clear the items from all lists and table
         itemTable.getItems().clear();
         allItems.clear();
         viewedItems.clear();
-        errorLabel.setText(" ");
     }
 
     private int getIndexOfID(int id) {
@@ -405,6 +441,16 @@ public class MainWindowController implements Initializable {
         }
         //Return invalid counter if item is not found
         return -1;
+    }
+
+    private void resetInformationEntryFields() {
+        //Reset all item information entry fields to their default values
+        itemNameBox.clear();
+        itemDateBox.getEditor().clear();
+        itemDateBox.setValue(null);
+        itemDetailBox.clear();
+        completionStatusBtn.setSelected(false);
+        errorLabel.setText(" ");
     }
 }
 

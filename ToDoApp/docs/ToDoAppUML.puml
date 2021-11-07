@@ -1,112 +1,89 @@
 @startuml
 class ToDoItem {
-  - String itemName
-  - String itemDueDate
-  - String itemDetails
-  + boolean completionStatus
+      - final int itemID
+      - final SimpleStringProperty itemName
+      - final LocalDate itemDueDate
+      - final SimpleStringProperty itemDetails
+      - final CheckBox completionStatus
 --
-  + ToDoItem(String name, String date, String details)
-  + ToDoItem(String name, String date, String details, boolean completion)
-..
-Setter methods
-  + void setItemName(String name)
-  + void setDueDate(String date)
-  + void setDetails(String details)
-  + void setCompletionStatus(boolean completion)
+  + ToDoItem(String name, LocalDate date, String details)
+  + ToDoItem(String name, LocalDate date, String details, boolean selection)
+  + ToDoItem(String name, LocalDate date, String details, boolean selection, int id)
 ..
 Getter methods
   + String getItemName()
-  + String getDueDate()
+  + LocalDate getItemDueDate()
+  + String getItemDueDateString()
   + String getItemDetails()
+  + Boolean getCompletionStatusBoolean()
+  + int getItemID()
 }
 MainWindowController -- ToDoItem
-Application -- ToDoItem
 
 class Application {
 Launching methods
-  + void start(Stage stage)
-  + static void main(String[] args)
+ + void start(Stage stage)
+ + static void main(String[] args)
 }
 
 class MainWindowController {
-  # ArrayList<ToDoItem> listOfItems
-  # boolean showCompleted
-  # boolean showIncomplete
-
-    @FXML Items
-        - Button saveBtn
-        - Button uploadBtn
-        - Label nameText
-        - Label dateText
-        - Label detailText
-        - CheckBox hideCompletedBtn
-        - CheckBox hideIncompleteBtn
-        - ListView<?> listOfItemsList
-        - Button listOfItemsAddBtn
-        - Button listOfItemsEditBtn
-        - Button listOfItemsRmvBtn
+  Storage lists:
+      List<ToDoItem> allItems
+      ObservableList<ToDoItem> viewedItems
+  ..
+  @FXML Items:
+       - MenuItem saveBtn
+       - MenuItem uploadBtn
+       - Button showCompletedBtn
+       - Button showIncompleteBtn
+       - Button showAllBtn
+       - Label errorLabel
+       - CheckBox completionStatusBtn
+       - DatePicker itemDateBox
+       - TextField itemDetailBox
+       - TextField itemNameBox
+       - Button itemSelectBtn
+       - Button itemEditBtn
+       - Button itemAddBtn
+       - Button itemRemoveBtn
+       - Button clearAllItemsBtn
+       - TableView<ToDoItem> itemTable
+            - TableColumn<ToDoItem, CheckBox> completionColumn
+            - TableColumn<ToDoItem, String> nameColumn
+            - TableColumn<ToDoItem, LocalDate> dateColumn
+            - TableColumn<ToDoItem, String> detailColumn
   --
-    @FXML actions
-        - void saveList()
-        - void uploadList()
-        - void setNameText()
-        - void setDateText()
-        - void setDetailText()
-        - void setHideCompletedBtn()
-        - void setHideIncompleteBtn()
-        - void selectFromListOfItems()
-        - void useListOfItemsAddBtn()
-        - void useListOfItemsEditBtn()
-        - void useListOfItemsRmvBtn()
+    @FXML actions:
+        + void initialize(URL url, ResourceBundle rb)
+        - void saveList(ActionEvent event)
+        - void uploadList(ActionEvent event)
+        - void setShowCompleted(ActionEvent event)
+        - void setShowIncomplete(ActionEvent event)
+        - void setShowAll(ActionEvent event)
+        - void selectItemFromList(ActionEvent event)
+        - void addItemToList(ActionEvent event)
+        - void editItemFromList(ActionEvent event)
+        - void deleteItemFromList(ActionEvent event)
+        - void clearList(ActionEvent event)
+  --
+    Hidden actions:
+        - void generateSaveFile(String filePath)
+        - void parseListFile(String filePath)
+        - ObservableList<ToDoItem> getViewedItemList()
+        - boolean validateTextSize(int textSize)
+        - int getIndexOfID(int id)
+        - void resetInformationEntryFields()
 }
 Application -- MainWindowController
+MainWindowController *-- Initializable
 
-class ItemPromptADDController {
-    @FXML items
-      - Button itemPromptOkADDBtn
-      - DatePicker itemDateBoxADD
-      - TextField itemDetailsTextBoxADD
-      - TextField itemNameTextBoxADD
-      - Label errorMsgDateADD
+class Initializable {
+Overridden from StringConverter :
 --
-    @FXML actions
-      - void createItem()
+final String pattern = "yyyy-MM-dd"
+final DateTimeFormatter dateFormatter
+..
+ + String toString(LocalDate date)
+ + LocalDate fromString(String string)
 }
-MainWindowController -- ItemPromptADDController
-
-class ItemPromptEDITController {
-    @FXML items
-      - Button itemPromptOkEDITBtn
-      - CheckBox IsCompleteBtn
-      - DatePicker itemDateBoxEDIT
-      - TextField itemDetailsTextBoxEDIT
-      - TextField itemNameTextBoxEDIT
-      Label errorMsgDateEDIT
---
-    @FXML actions
-      - void editItem()
-}
-MainWindowController -- ItemPromptEDITController
-
-class SavePromptController {
-    @FXML items
-      - TextField savePath;
-      - TextField fileNameText;
-      - Button fileSaveOkBtn;
---
-    @FXML actions
-      - void saveList()
-}
-MainWindowController -- SavePromptController
-
-class UploadPromptController {
-    @FXML items
-      - TextField uploadPath;
-      - Button fileUploadOkBtn;
---
-    @FXML actions
-      - void uploadList()
-}
-
-MainWindowController -- UploadPromptController
 @enduml
