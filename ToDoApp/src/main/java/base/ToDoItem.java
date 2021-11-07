@@ -34,6 +34,16 @@ public class ToDoItem {
         itemID = rand.nextInt();
     }
 
+    public ToDoItem(String name, LocalDate date, String details, boolean selection, int id) {
+        //Set instance details to passed arguments
+        itemName = new SimpleStringProperty(name);
+        itemDueDate = date;
+        itemDetails = new SimpleStringProperty(details);
+        completionStatus = new CheckBox();
+        completionStatus.setSelected(selection);
+        itemID = id;
+    }
+
     public String getItemName(){
         return itemName.get();
     }

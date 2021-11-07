@@ -9,17 +9,13 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
-import java.io.File;
+import java.io.*;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.Month;
@@ -27,6 +23,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Scanner;
 
 public class MainWindowController implements Initializable {
     //Storage variables
@@ -42,14 +39,30 @@ public class MainWindowController implements Initializable {
         //Open save window
         try {
             FileChooser fileChooser = new FileChooser();
-            File file = fileChooser.showOpenDialog(null);
+            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text File", ".txt"));
+            File file = fileChooser.showSaveDialog(null);
             if (file != null) {
                 filePath = file.getPath();
                 System.out.print(filePath);
+                generateSaveFile(filePath);
             }
         }
         catch (Exception e){
             //Do nothing
+        }
+    }
+
+    private void generateSaveFile(String filePath) throws FileNotFoundException {
+        PrintStream fileOut = new PrintStream(filePath);
+        System.setOut(fileOut);
+        System.out.printf("%d%n%n", allItems.size());
+        for (ToDoItem item : allItems) {
+            System.out.printf("%d%n", item.getItemID());
+            System.out.printf("%s%n", item.getItemName());
+            System.out.printf("%s%n", item.getItemDueDateString());
+            System.out.printf("%s%n", item.getItemDetails());
+            System.out.print(item.getCompletionStatusBoolean());
+            System.out.printf("%n%n");
         }
     }
 
@@ -66,11 +79,51 @@ public class MainWindowController implements Initializable {
             if (file != null) {
                 filePath = file.getPath();
                 System.out.print(filePath);
+                parseListFile(filePath);
             }
         }
         catch (Exception e){
             //Do nothing
         }
+    }
+
+    private void parseListFile(String filePath) {
+        //Clear stored lists
+        viewedItems.clear();
+        allItems.clear();
+        //Attempt to access file for parsing
+        try (Scanner fileIn = new Scanner(new FileInputStream(filePath))){
+            System.out.printf("%n");
+            int numItems = fileIn.nextInt();
+            System.out.printf("File found, num items saved: %d %n", numItems);
+            int id;
+            String name;
+            String details;
+            LocalDate dueDate;
+            boolean isComplete;
+            //for the number of items
+            for (int  i = 0; i< numItems; i++) {
+                id = fileIn.nextInt();
+                System.out.printf("id saved: %d %n", id);
+                fileIn.next();
+                name = fileIn.nextLine();
+                System.out.printf("name saved: %s %n", name);
+                dueDate = LocalDate.parse(fileIn.nextLine(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                System.out.printf("date saved: %s %n", dueDate);
+                details = fileIn.nextLine();
+                System.out.printf("details saved: %s %n", details);
+                isComplete = fileIn.nextBoolean();
+                System.out.printf("status saved: %b %n", isComplete);
+                ToDoItem item = new ToDoItem(name, dueDate, details, isComplete, id);
+
+                allItems.add(item);
+                viewedItems.add(item);
+            }
+        } catch (Exception e){
+            //Print error message
+            System.out.printf("%nError parsing file%n");
+        }
+        itemTable.refresh();
     }
 
     @FXML
